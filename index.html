@@ -1,0 +1,784 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
+<meta name="color-scheme" content="light">
+<title>Growth Audit — Yoga-Go</title>
+<meta name="description" content="The Yoga-Go paywall, rebuilt to carry each user's goal, date and first week. A growth audit by Adapty.">
+<link rel="icon" href="img/icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:wght@400;500&family=Spectral:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
+<style>
+/* Shell: yogago.welltech.com — white, SF Pro light headings with a Spectral italic word, one accent: the #FCC41A of the Yoga-Go button.
+   Phone: the app as recorded — #F5F3FB page, white cards, serif questions, #FCC41A CONTINUE in spaced capitals, the dark paywall sheet. */
+:root{
+  color-scheme:only light;
+  --ink:#1A1A1A; --ink-soft:#2A2A2C; --muted:rgba(26,26,26,.6); --faint:rgba(26,26,26,.2); --line:rgba(26,26,26,.09);
+  --soft:#FAF9FD; --cream:#F5F3FB; --cream2:#EAE7F4; --white:#FFFFFF;
+  --gold:#FCC41A; --gold-lift:#8A6A00; --gold-soft:#FFF1C2;
+  --mark:linear-gradient(transparent 60%,rgba(252,196,26,.5) 60%);
+  --f:"SF Pro Display","SF Pro Text",-apple-system,BlinkMacSystemFont,'Inter',system-ui,'Helvetica Neue',Arial,sans-serif;
+  --it:'Spectral',Georgia,serif;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+html,body{overflow-x:clip}
+body{font-family:var(--f);color:var(--ink-soft);background:var(--white);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+button,select{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a{color:inherit}
+img,video{display:block}
+em.g{font-style:normal;background:var(--mark);padding:0 2px}
+em.s{font-family:var(--it);font-style:italic;font-weight:500;letter-spacing:-.01em}
+.hero em.s{color:var(--gold)}
+.wrap{max-width:1200px;margin:0 auto;padding:0 40px}
+@media(max-width:700px){.wrap{padding:0 16px}}
+
+/* ---- top bar ---- */
+.nav{position:sticky;top:0;z-index:50;padding:12px 12px 0}
+.nav-in{max-width:1200px;margin:0 auto;padding:0 10px 0 22px;height:60px;display:flex;align-items:center;gap:14px;background:rgba(245,243,251,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-radius:999px;box-shadow:0 1px 0 var(--line)}
+@media(max-width:700px){.nav-in{padding:0 8px 0 16px;gap:8px}}
+.logo{width:112px;height:25px;background:var(--ink);-webkit-mask:url(img/logo.svg) left center/contain no-repeat;mask:url(img/logo.svg) left center/contain no-repeat;flex:none}
+@media(max-width:400px){.logo{width:88px}}
+.nav-in .sep{width:1px;height:20px;background:var(--faint)}
+.nav-in .lbl{font-size:14px;color:var(--muted);white-space:nowrap}
+@media(max-width:760px){.nav-in .sep,.nav-in .lbl{display:none}}
+.tabs{margin-left:auto;display:flex;gap:2px}
+.tabs button{height:40px;padding:0 16px;border-radius:999px;font-size:15px;font-weight:500;color:var(--muted)}
+@media(max-width:400px){.tabs button{padding:0 11px;font-size:14px}}
+.tabs button.on{background:var(--white);color:var(--ink);box-shadow:0 1px 3px rgba(26,26,26,.1)}
+.demo{height:44px;padding:0 20px;border-radius:999px;background:var(--ink);color:#fff;font-size:15px;font-weight:500;display:flex;align-items:center;text-decoration:none;white-space:nowrap}
+.demo:hover{background:#000}
+@media(max-width:560px){.nav .demo{display:none}}
+.view{display:none}.view.on{display:block}
+
+/* ======================= OVERVIEW ======================= */
+/* hero: the dark of their “30+ million” welcome, their 7-minute dial breathing, and goal curves drawing themselves */
+.dusk{background:radial-gradient(120% 90% at 80% 25%,#3a3226 0%,#221f21 45%,#18171a 100%)}
+.hero-frame{margin:-72px 12px 0;border-radius:20px;overflow:hidden;position:relative;color:#fff;min-height:720px;display:flex;align-items:flex-end}
+.hero-frame::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(24,23,26,.94) 0%,rgba(24,23,26,.66) 52%,rgba(24,23,26,.12) 100%);pointer-events:none;z-index:1}
+.curves{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.9}
+.curves path{fill:none;stroke-width:2;stroke-linecap:round;stroke-dasharray:1400;stroke-dashoffset:1400;animation:draw 11s var(--ease) infinite}
+.curves circle{animation:dotin 11s var(--ease) infinite;opacity:0}
+@keyframes draw{0%{stroke-dashoffset:1400}35%,80%{stroke-dashoffset:0}100%{stroke-dashoffset:-1400}}
+@keyframes dotin{0%,30%{opacity:0}38%,80%{opacity:1}92%,100%{opacity:0}}
+.dial{position:absolute;right:4%;top:50%;width:min(620px,60vw);aspect-ratio:1;transform:translateY(-50%);pointer-events:none}
+.dial .ring{fill:none;stroke:rgba(255,255,255,.07);stroke-width:5}
+.dial .arc{fill:none;stroke:rgba(252,196,26,.32);stroke-width:5;stroke-linecap:round;stroke-dasharray:629;stroke-dashoffset:629;animation:breathe 8s ease-in-out infinite;transform:rotate(-90deg);transform-origin:center}
+.dial .knob{fill:rgba(255,255,255,.28)}
+@keyframes breathe{0%,100%{stroke-dashoffset:560}50%{stroke-dashoffset:300}}
+.dial text{fill:rgba(255,255,255,.07);font:600 160px/1 var(--f);text-anchor:middle}
+@media(prefers-reduced-motion:reduce){.curves path,.curves circle,.dial .arc{animation:none;stroke-dashoffset:0;opacity:1}}
+.hero-in{position:relative;z-index:2;width:100%;display:grid;grid-template-columns:1.25fr .75fr;gap:30px;align-items:end;padding-top:190px;padding-bottom:56px}
+@media(max-width:900px){.hero-frame{min-height:0}.hero-in{grid-template-columns:1fr;padding-top:170px;padding-bottom:36px}}
+.eyebrow{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.75);font-weight:500}
+.hero h1{font-size:clamp(38px,5.2vw,68px);line-height:1.04;font-weight:400;letter-spacing:-.03em;margin-top:16px;max-width:840px;text-wrap:balance}
+.hero .lead{font-size:clamp(17px,1.7vw,19px);line-height:1.55;margin-top:20px;max-width:660px;color:rgba(255,255,255,.86)}
+.cta-row{display:flex;gap:10px;align-items:center;margin-top:28px;flex-wrap:wrap}
+.btn-w{height:50px;padding:0 24px;border-radius:999px;background:#fff;color:var(--ink);font-size:17px;font-weight:500;display:inline-flex;align-items:center;gap:10px}
+.btn-w:hover{background:var(--cream)}
+.btn-o{height:50px;padding:0 22px;border-radius:999px;background:rgba(255,255,255,.14);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#fff;font-size:17px;font-weight:500;display:inline-flex;align-items:center;gap:8px}
+.btn-o:hover{background:rgba(255,255,255,.24)}
+.byline{margin-top:16px;font-size:14px;color:rgba(255,255,255,.66)}
+.fan{position:relative;height:420px}
+.fan img{position:absolute;width:184px;aspect-ratio:560/1028;object-fit:cover;object-position:top;border-radius:18px;border:4px solid #2a272a;box-shadow:0 24px 60px rgba(0,0,0,.5);background:#fff}
+.fan .j{width:84px;height:84px;border-radius:22px;border:0;aspect-ratio:auto;left:40%;bottom:0;z-index:4}
+@media(max-width:900px){.fan{height:290px}.fan img{width:124px;border-width:3px;border-radius:13px}.fan .j{width:62px;height:62px;border-radius:16px}}
+
+.stats{margin:12px 12px 0;border-radius:20px;background:var(--cream)}
+.stats .wrap{display:grid;grid-template-columns:repeat(4,1fr)}
+.stat{padding:30px 18px;text-align:center;border-left:1px solid var(--line)}
+.stat:first-child{border-left:0}
+.stat b{display:block;font-size:38px;font-weight:600;letter-spacing:-.03em;line-height:1.1;color:var(--ink)}
+.stat b i{font-style:normal;color:var(--gold)}
+.stat span{display:block;font-size:14px;color:var(--muted);margin-top:6px;line-height:1.35}
+@media(max-width:800px){.stats .wrap{grid-template-columns:repeat(2,1fr)}.stat:nth-child(3){border-left:0}.stat{border-top:1px solid var(--line)}.stat:nth-child(-n+2){border-top:0}.stat b{font-size:30px}}
+
+.sec{padding:96px 0}
+@media(max-width:700px){.sec{padding:64px 0}}
+.sec-h{font-size:clamp(30px,3.9vw,48px);line-height:1.08;font-weight:400;letter-spacing:-.03em;max-width:900px;color:var(--ink)}
+.sec-h b{font-weight:400;color:var(--muted)}
+.sec-p{font-size:18px;line-height:1.6;color:var(--muted);margin-top:18px;max-width:780px}
+.kick{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:500;margin-bottom:14px}
+
+.about{display:grid;grid-template-columns:1.2fr 1fr;gap:48px;align-items:start}
+@media(max-width:860px){.about{grid-template-columns:1fr}}
+.flowp{margin-top:26px;display:flex;flex-direction:column;gap:10px}
+.flowp div{display:flex;gap:12px;align-items:flex-start;font-size:16px;color:var(--ink-soft);line-height:1.45}
+.flowp i{font-style:normal;flex:none;width:22px;height:22px;border-radius:50%;background:var(--gold);color:var(--ink);display:grid;place-items:center;font-size:12px;font-weight:600;margin-top:1px}
+.flowp b{font-weight:500;color:var(--ink)}
+.flowp .k2{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:500;margin-top:8px}
+.note{background:var(--cream);border-radius:16px;padding:22px 24px}
+.note h4{font-size:17px;font-weight:500;color:var(--ink);margin-bottom:6px;display:flex;gap:10px;align-items:center}
+.note h4 i{font-style:normal;width:26px;height:26px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:12px}
+.note p{font-size:15px;color:var(--muted);line-height:1.55}
+.note+.note{margin-top:10px}
+
+/* your ads */
+.lib{background:var(--cream);border-radius:20px;padding:32px;margin-top:44px;display:grid;grid-template-columns:300px 1fr;gap:36px;align-items:start}
+@media(max-width:900px){.lib{grid-template-columns:1fr;padding:16px}}
+.vid{position:relative;border-radius:14px;overflow:hidden;background:#000;aspect-ratio:9/16;max-width:300px}
+.vid video{width:100%;height:100%;object-fit:cover}
+.vid .tag{position:absolute;top:10px;left:10px;background:rgba(255,255,255,.94);color:var(--ink);font-size:11px;font-weight:500;letter-spacing:.06em;padding:5px 10px;border-radius:999px;display:flex;gap:6px;align-items:center}
+.vid .tag::before{content:"";width:8px;height:8px;border-radius:50%;background:#0866FF}
+.strip{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px;max-width:300px}
+.strip img{width:100%;aspect-ratio:9/14;object-fit:cover;border-radius:8px}
+.adb .hook{font-size:26px;font-weight:500;letter-spacing:-.02em;line-height:1.25;color:var(--ink)}
+.adb .meta{font-size:13.5px;color:var(--muted);margin-top:10px}
+.adb dl{margin-top:8px;font-size:15.5px;line-height:1.5}
+.adb dt{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:16px;font-weight:500}
+.adb dd{color:var(--ink-soft)}
+.adb .go{margin-top:22px}
+.adb .go button{height:48px;padding:0 24px;border-radius:999px;background:var(--ink);color:#fff;font-size:15px;font-weight:500}
+.also{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:22px;padding-top:18px;border-top:1px solid var(--line)}
+@media(max-width:700px){.also{grid-template-columns:1fr}}
+.also button{display:flex;gap:12px;align-items:center;text-align:left;font-size:14px;color:var(--muted);line-height:1.45;background:var(--white);border-radius:14px;padding:10px}
+.also button:hover{background:var(--soft)}
+.also img{width:54px;height:84px;object-fit:cover;border-radius:8px;flex:none}
+.also b{display:block;color:var(--ink);font-weight:500;font-size:14.5px}
+.also u{color:var(--ink);text-underline-offset:3px;text-decoration-color:var(--faint)}
+.lib-foot{margin-top:16px;font-size:14px;color:var(--muted);line-height:1.55;max-width:880px}
+
+/* the five ideas */
+.list{margin-top:40px;display:flex;flex-direction:column;max-width:980px;border-top:1px solid var(--line)}
+.it{display:grid;grid-template-columns:64px 1fr;gap:18px;padding:26px 6px;cursor:pointer;border-bottom:1px solid var(--line);transition:background .2s}
+.it:hover{background:var(--soft)}
+@media(max-width:600px){.it{grid-template-columns:40px 1fr;gap:10px}}
+.it .em{font-size:22px;font-weight:500;color:var(--muted);letter-spacing:-.02em;padding-top:2px}
+.it h3{font-size:22px;font-weight:500;letter-spacing:-.02em;line-height:1.3;color:var(--ink)}
+.it p{font-size:15.5px;color:var(--muted);margin-top:6px;line-height:1.55;max-width:780px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:12px;flex-wrap:wrap}
+.out{display:inline-flex;align-items:baseline;gap:8px;background:var(--gold-soft);color:#5E4800;padding:5px 12px;border-radius:999px;font-weight:500;font-size:14.5px}
+.out small{font-weight:400;font-size:12.5px}
+.see{font-size:14.5px;color:var(--ink);font-weight:500;text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--faint)}
+
+/* the outcome */
+.outc{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:40px}
+@media(max-width:860px){.outc{grid-template-columns:1fr}}
+.osh{position:relative;overflow:hidden;color:#fff;border-radius:20px;padding:36px 32px;display:flex;flex-direction:column;justify-content:flex-end;min-height:480px}
+.osh>.ph{position:absolute;right:-30px;top:-10px;width:380px;opacity:.95}
+.osh::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(24,23,26,.97) 38%,rgba(24,23,26,.15) 78%)}
+.osh>*:not(.ph){position:relative;z-index:2}
+.osh .k{font-size:12px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.7)}
+.osh h3{font-size:30px;font-weight:400;letter-spacing:-.025em;margin-top:8px;line-height:1.15;max-width:460px}
+.osh .nums{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap}
+.osh .nums div{background:rgba(255,255,255,.1);border-radius:16px;padding:14px 20px;min-width:130px}
+.osh .nums b{display:block;font-size:40px;font-weight:600;letter-spacing:-.03em;line-height:1;color:var(--gold)}
+.osh .nums span{font-size:13.5px;color:rgba(255,255,255,.8)}
+.osh .cap{font-size:14.5px;color:rgba(255,255,255,.78);margin-top:18px;line-height:1.5;max-width:470px}
+.dos{display:flex;flex-direction:column;gap:12px}
+.do{background:var(--cream);border-radius:20px;padding:24px 26px;flex:1}
+.do .k{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:500;margin-bottom:6px}
+.do h4{font-size:20px;font-weight:500;letter-spacing:-.02em;color:var(--ink)}
+.do p{font-size:15px;color:var(--muted);margin-top:6px;line-height:1.55}
+.endcta{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:40px}
+.btn-k{height:52px;padding:0 26px;border-radius:999px;background:var(--ink);color:#fff;font-size:17px;font-weight:500;display:inline-flex;align-items:center}
+.btn-k:hover{background:#000}
+.btn-l{height:52px;padding:0 24px;border-radius:999px;background:var(--cream);color:var(--ink);font-size:17px;font-weight:500;display:inline-flex;align-items:center;text-decoration:none}
+.foot{font-size:13px;color:var(--muted);line-height:1.6;padding:30px 0 60px;border-top:1px solid var(--line);margin-top:36px}
+
+/* ======================= PROTOTYPE VIEW ======================= */
+.pwv{padding-top:48px;padding-bottom:70px}
+.pwv h1{font-size:clamp(34px,4.6vw,56px);font-weight:400;line-height:1.04;letter-spacing:-.03em;color:var(--ink)}
+.pwv h1 b{font-weight:400;color:var(--muted)}
+.pwv .sub{font-size:18px;color:var(--muted);margin-top:14px;max-width:840px}
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:24px;align-items:center}
+.seg{display:inline-flex;background:var(--cream);border-radius:999px;padding:3px}
+.seg button{height:36px;padding:0 14px;border-radius:999px;font-size:14px;font-weight:500;color:var(--muted)}
+.seg button.on{background:var(--white);color:var(--ink);box-shadow:0 1px 3px rgba(26,26,26,.12)}
+.wt{height:42px;padding:0 18px;border-radius:999px;background:var(--ink);color:#fff;font-size:14.5px;font-weight:500;display:inline-flex;align-items:center;gap:8px}
+.wt.on{background:var(--gold);color:var(--ink)}
+.steps{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.steps button{height:44px;padding:0 18px;border-radius:999px;background:var(--cream);font-size:15px;font-weight:500;color:var(--ink-soft);transition:all .15s}
+.steps button:hover{background:var(--cream2)}
+.steps button.on{background:var(--ink);color:#fff}
+.steps button.td{background:#fff;box-shadow:inset 0 0 0 1.5px var(--faint);color:var(--muted)}
+.steps button.td.on{background:var(--muted);color:#fff;box-shadow:none}
+.stcap{margin-top:14px;font-size:15.5px;color:var(--muted);min-height:24px;max-width:900px}
+.stcap b{font-weight:500;color:var(--ink)}
+.dcap{margin-top:14px;height:0;overflow:hidden;transition:height .25s}
+.dcap.on{height:58px}
+.dcap-in{display:flex;align-items:center;gap:14px;background:var(--ink);color:#fff;border-radius:16px;padding:0 18px;height:58px;font-size:15px}
+.dcap-in .pr{flex:none;width:120px;height:4px;background:rgba(255,255,255,.2);border-radius:2px;overflow:hidden}
+.dcap-in .pr i{display:block;height:100%;width:0;background:var(--gold);transition:width .4s}
+.dcap-in span{flex:1}
+@media(max-width:600px){.dcap.on{position:fixed;left:8px;right:8px;bottom:8px;z-index:60;margin:0;height:auto}.dcap-in{height:auto;min-height:58px;padding:10px 14px;font-size:14px}.dcap-in .pr{width:60px}}
+.trio{display:flex;gap:28px;justify-content:center;margin-top:26px;--sc:.8}
+@media(max-width:899px){.trio{justify-content:flex-start;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 16px 14px;margin-left:-16px;margin-right:-16px;gap:16px;scrollbar-width:none}.trio::-webkit-scrollbar{display:none}}
+.tcol{flex:none;display:flex;flex-direction:column;align-items:center;scroll-snap-align:center}
+.apill{display:flex;align-items:center;gap:8px;height:34px;padding:0 14px 0 6px;border-radius:999px;background:var(--cream);font-size:13.5px;font-weight:500;color:var(--ink-soft);margin-bottom:14px;max-width:calc(390px * var(--sc) + 20px);white-space:nowrap;overflow:hidden}
+.apill .mt{height:24px;padding:0 10px;border-radius:99px;background:#0866FF;color:#fff;font-size:11.5px;display:inline-flex;align-items:center;flex:none}
+.apill .tx{overflow:hidden;text-overflow:ellipsis}
+.pbox{width:calc(390px * var(--sc));height:calc(844px * var(--sc));position:relative}
+.phone{position:absolute;left:0;top:0;width:390px;height:844px;transform:scale(var(--sc));transform-origin:0 0;border-radius:58px;background:#0c0c0c;padding:12px;box-shadow:0 30px 60px rgba(26,26,26,.22),0 0 0 2px #2c2c2c inset}
+.tcol.ring .phone{box-shadow:0 30px 60px rgba(26,26,26,.22),0 0 0 6px var(--ring)}
+.tlab{margin-top:16px;text-align:center;max-width:calc(390px * var(--sc) + 10px)}
+.tlab b{display:block;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);font-weight:500}
+.tlab span{display:block;font-size:14px;color:var(--muted);margin-top:4px;line-height:1.45}
+.ans{margin-top:12px;width:calc(390px * var(--sc));background:var(--cream);border-radius:16px;padding:12px 12px 10px;text-align:left}
+.ans .h{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:500;margin-bottom:8px;display:flex;justify-content:space-between}
+.ans .h i{font-style:normal;text-transform:none;letter-spacing:0}
+.ans .g{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.ans label{display:flex;flex-direction:column;font-size:10.5px;color:var(--muted);background:var(--white);border-radius:10px;padding:5px 9px 4px;min-width:0}
+.ans label.w2{grid-column:1/-1}
+.ans select{font-size:14px;font-weight:500;color:var(--ink);padding:1px 0;appearance:none;-webkit-appearance:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23777' fill='none' stroke-width='1.5'/%3E%3C/svg%3E") right 2px center no-repeat;width:100%;text-overflow:ellipsis}
+.finger{position:absolute;z-index:30;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;background:rgba(255,255,255,.55);box-shadow:0 0 0 2px rgba(26,26,26,.35),0 6px 18px rgba(0,0,0,.35);pointer-events:none;opacity:0;transition:left .38s var(--ease),top .38s var(--ease),transform .12s,opacity .2s}
+.finger.on{opacity:1}.finger.press{transform:scale(.72)}
+
+.ideas{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:56px}
+@media(max-width:800px){.ideas{grid-template-columns:1fr}}
+.idea{background:var(--cream);border-radius:16px;padding:22px 24px;cursor:pointer;transition:background .15s}
+.idea:hover{background:var(--cream2)}
+.idea:last-child{grid-column:1/-1}
+.idea .n{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-lift);font-weight:600}
+.idea h3{font-size:19px;font-weight:500;letter-spacing:-.02em;margin-top:4px;line-height:1.3;color:var(--ink)}
+.idea p{font-size:14.5px;color:var(--muted);margin-top:6px;line-height:1.55}
+.idea .kept{font-size:13px;color:var(--muted);margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
+.qr{position:relative;overflow:hidden;display:flex;gap:26px;align-items:center;color:#fff;border-radius:20px;padding:30px 32px;margin-top:40px;flex-wrap:wrap}
+.qr>*{position:relative;z-index:2}
+.qr .woman{position:absolute;right:170px;bottom:-60px;width:230px;opacity:.85;z-index:1}
+.qr img.code{width:135px;height:135px;background:#fff;border-radius:12px;image-rendering:pixelated}
+.qr h3{font-size:24px;font-weight:500;letter-spacing:-.02em}
+.qr p{font-size:15px;color:rgba(255,255,255,.82);margin-top:4px;max-width:480px}
+.qr .demo{margin-left:auto;background:#fff;color:var(--ink);height:48px;padding:0 24px;font-size:16px}
+@media(max-width:1080px){.qr img.code,.qr .woman{display:none}}
+@media(max-width:700px){.qr .demo{margin-left:0}}
+
+/* ---- inside the phone: Yoga-Go as it ships. Every internal class is yg-. ---- */
+.scr{position:absolute;inset:12px;border-radius:46px;overflow:hidden;color-scheme:only light;
+  --c-bg:#F5F3FB; --c-card:#FFFFFF; --c-ink:#1A1A1A; --c-ink2:#3C3C40; --c-mute:#8B8A93; --c-line:#E6E3EF; --c-y:#FCC41A; --c-ysel:#FFF8E1;
+  --c-sheet:#1E1D20; --c-sheet2:#2B2A2E; --c-media:#DAD9DE; --c-red:#E5484D;
+  background:var(--c-bg);color:var(--c-ink);font-family:-apple-system,BlinkMacSystemFont,'Inter','Helvetica Neue',sans-serif;display:flex;flex-direction:column}
+.phone.dk .scr{--c-bg:#121214; --c-card:#1E1E22; --c-ink:#F2F2F5; --c-ink2:#CFCFD6; --c-mute:#8E8E96; --c-line:#2C2C31; --c-ysel:rgba(252,196,26,.12); --c-media:#2A292D; --c-sheet:#0D0D0F; --c-sheet2:#1F1E22}
+.sb{height:50px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 30px 0 36px;font-size:15px;font-weight:600;font-family:-apple-system,sans-serif;position:relative;z-index:6;color:var(--c-ink)}
+.sb.w{color:#fff}
+.sb .isl{position:absolute;left:50%;top:11px;width:120px;height:34px;margin-left:-60px;background:#000;border-radius:20px}
+.sb .ic{display:flex;gap:5px;align-items:center}
+.scr-top{flex:none;height:46px;display:flex;align-items:center;justify-content:center;padding:0 16px;position:relative;z-index:5}
+.yg-mark{width:84px;height:19px;background:var(--c-ink);-webkit-mask:url(img/logo.svg) center/contain no-repeat;mask:url(img/logo.svg) center/contain no-repeat}
+.scr-body{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;position:relative}
+.scr-body::-webkit-scrollbar{display:none}
+.scr-foot{flex:none;position:relative;z-index:4}
+.toast{position:absolute;left:50%;bottom:130px;transform:translateX(-50%) translateY(10px);background:rgba(26,26,26,.94);color:#fff;font:500 13px/1.3 -apple-system,'Inter',sans-serif;padding:10px 15px;border-radius:999px;opacity:0;transition:all .25s;pointer-events:none;z-index:40;white-space:nowrap;box-shadow:0 6px 20px rgba(0,0,0,.3)}
+.toast.show{opacity:1;transform:translateX(-50%)}
+.pulse{animation:pulse 1.6s ease-out 2}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(252,196,26,.95)}100%{box-shadow:0 0 0 16px rgba(252,196,26,0)}}
+.phone.pulse{animation:pring 1.6s ease-out 2}
+@keyframes pring{0%{box-shadow:0 0 0 0 rgba(252,196,26,.9)}100%{box-shadow:0 0 0 26px rgba(252,196,26,0)}}
+
+/* their plan screen: “Your 4-week yoga plan is ready!” */
+.yg-q{font-family:'Lora',Georgia,serif;font-weight:400;font-size:27px;line-height:1.2;letter-spacing:-.01em;color:var(--c-ink)}
+.yg-q span{color:#1FB96B}
+.yg-chart{background:var(--c-card);border-radius:6px;padding:14px 12px 10px;margin:6px 16px 0;position:relative}
+.yg-chart .k{font-size:13px;color:var(--c-mute)}
+.yg-chart svg{display:block;width:100%;height:auto;overflow:visible}
+.yg-chart .ax{display:flex;justify-content:space-between;font-size:10.5px;color:var(--c-mute);padding:0 6px;margin-top:2px}
+.yg-pl{padding:22px 18px 0;text-align:center}
+.yg-pl .yg-q{font-size:28px}
+.yg-pl p{font-size:14px;color:var(--c-ink2);margin-top:10px;line-height:1.5}
+.yg-uses{margin:16px 16px 0;display:flex;flex-direction:column;gap:6px}
+.yg-uses div{display:flex;justify-content:space-between;background:var(--c-card);border-radius:4px;padding:9px 12px;font-size:13px;color:var(--c-ink2)}
+.yg-uses b{color:var(--c-ink);font-weight:600}
+.yg-cta{display:flex;align-items:center;justify-content:center;width:100%;height:52px;border-radius:3px;background:var(--c-y);color:#1A1A1A;font:700 14px/1 -apple-system,'Inter',sans-serif;letter-spacing:.16em;text-transform:uppercase}
+.yg-footy{padding:12px 16px 26px;background:var(--c-bg)}
+
+/* the paywall: light media on top, the dark sheet, three columns */
+.yg-media{position:relative;background:var(--c-media);height:250px;overflow:hidden}
+.yg-media img.pose{position:absolute;left:0;top:0;width:100%;height:100%;object-fit:cover;object-position:center 30%;filter:saturate(.85)}
+.yg-x{position:absolute;left:14px;top:8px;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:#3C3C40;background:rgba(255,255,255,.7);z-index:3}
+.yg-x svg{width:18px;height:18px}
+.yg-media .yg-chart{position:absolute;left:0;right:0;top:40px;margin:0 18px;box-shadow:0 10px 30px rgba(0,0,0,.12);border-radius:10px}
+.yg-media.pr{background:linear-gradient(180deg,#ECEAF4,#DAD9DE)}
+.phone.dk .yg-media.pr{background:linear-gradient(180deg,#26252a,#1b1a1e)}
+.yg-sheet{background:var(--c-sheet);color:#fff;padding:20px 16px 16px;margin-top:-14px;border-radius:14px 14px 0 0;position:relative}
+.yg-h{font-size:23px;line-height:1.2;font-weight:700;letter-spacing:-.01em;text-align:center;text-wrap:balance;border-radius:10px}
+.yg-chip{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;margin-top:10px}
+.yg-chip span{font-size:12px;padding:4px 10px;border-radius:999px;background:var(--c-sheet2);color:#E9E8EE;white-space:nowrap}
+.yg-chip span.y{background:rgba(252,196,26,.16);color:#FFD75E}
+.yg-wk{margin-top:16px;border-radius:12px}
+.yg-wk .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#A9A8B0;font-weight:600;margin-bottom:8px;display:flex;justify-content:space-between}
+.yg-wk .rw{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.yg-ses{background:var(--c-sheet2);border-radius:8px;overflow:hidden;text-align:left}
+.yg-ses img{width:100%;height:62px;object-fit:cover}
+.yg-ses div{padding:6px 7px 7px;font-size:11px;line-height:1.25;color:#fff}
+.yg-ses small{display:block;color:#A9A8B0;font-size:10px;margin-top:2px}
+.yg-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:22px;padding:2px;border-radius:10px}
+.yg-col{position:relative;background:transparent;border:1px solid #3A393E;border-radius:6px;padding:22px 4px 12px;text-align:center;color:#fff;transition:.15s;display:flex;flex-direction:column;align-items:center}
+.yg-col .tg{position:absolute;top:-1px;left:-1px;right:-1px;height:20px;border-radius:6px 6px 0 0;font-size:9.5px;font-weight:700;letter-spacing:.06em;display:flex;align-items:center;justify-content:center;white-space:nowrap}
+.yg-col .tg.r{background:var(--c-red);color:#fff}
+.yg-col .tg.y{background:var(--c-y);color:#1A1A1A}
+.yg-col .pd{font-size:13px;color:#C9C8CF}
+.yg-col .pw{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-top:6px;line-height:1}
+.yg-col .pu{font-size:10.5px;color:#A9A8B0;margin-top:3px}
+.yg-col .tt{font-size:11.5px;color:#C9C8CF;margin-top:10px;line-height:1.3}
+.yg-col .tt s{color:#8B8A93}
+.yg-col.on{background:#fff;color:#1A1A1A;border-color:#fff}
+.yg-col.on .pd,.yg-col.on .tt{color:#3C3C40}.yg-col.on .pu{color:#6B6A72}
+.yg-save{font-size:12px;color:#C9C8CF;text-align:center;margin-top:10px;line-height:1.45}
+.yg-save b{color:#FFD75E;font-weight:600}
+.yg-proof{margin-top:16px;background:var(--c-sheet2);border-radius:10px;padding:12px 13px}
+.yg-proof .t{display:flex;align-items:center;gap:7px;font-size:12.5px;color:#C9C8CF;flex-wrap:wrap}
+.yg-proof .t b{font-size:17px;color:#fff}
+.yg-st{color:var(--c-y);letter-spacing:1px;font-size:12.5px}
+.yg-proof q{display:block;font-family:'Lora',Georgia,serif;font-size:14.5px;line-height:1.4;margin-top:8px;color:#fff;quotes:"“" "”"}
+.yg-proof small{display:block;font-size:11px;color:#A9A8B0;margin-top:5px}
+.yg-terms{font-size:10.5px;color:#8B8A93;text-align:center;margin-top:14px;line-height:1.4}
+.yg-terms a{color:#C9C8CF}
+.yg-pfoot{background:var(--c-sheet);padding:10px 16px 24px}
+.yg-wcta{display:flex;align-items:center;justify-content:center;width:100%;height:52px;border-radius:3px;background:#fff;color:#1A1A1A;font:700 13.5px/1 -apple-system,'Inter',sans-serif;letter-spacing:.14em;text-transform:uppercase}
+.yg-fine{font-size:11px;color:#A9A8B0;text-align:center;margin-top:8px}
+.yg-today{margin:16px 0 4px;border:1.5px dashed #6B6A72;border-radius:10px;padding:11px;text-align:center;font-size:12px;color:#C9C8CF;line-height:1.5}
+
+/* their workout screen: the 7-minute dial */
+.yg-app{position:relative;flex:1;min-height:0;display:flex;flex-direction:column;background:var(--c-bg)}
+.yg-hero{position:relative;height:340px;flex:none;background:#2a2a2a;overflow:hidden}
+.yg-hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.5)}
+.yg-hero .day{position:absolute;left:16px;top:58px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.8);font-weight:600}
+.yg-hero .nm{position:absolute;left:16px;right:16px;bottom:16px;color:#fff;font-size:22px;font-weight:700;letter-spacing:-.01em}
+.yg-hero .nm small{display:block;font-size:12.5px;font-weight:400;opacity:.8;margin-top:2px}
+.yg-dial{position:absolute;left:50%;top:76px;width:150px;height:150px;margin-left:-75px;touch-action:none;cursor:grab}
+.yg-dial svg{width:100%;height:100%;overflow:visible}
+.yg-dial .v{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;pointer-events:none}
+.yg-dial .v b{font-size:50px;font-weight:600;line-height:1}
+.yg-dial .v span{font-size:13px;opacity:.85}
+.yg-cards{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px 14px 0}
+.yg-cards div{background:var(--c-card);border-radius:6px;padding:10px 12px;font-size:11px;color:var(--c-mute)}
+.yg-cards b{display:block;font-size:13.5px;color:var(--c-ink);font-weight:600;margin-top:2px}
+.yg-li{margin:8px 14px 0;background:var(--c-card);border-radius:6px;padding:11px 12px;display:flex;justify-content:space-between;font-size:13px;color:var(--c-ink)}
+.yg-li span{color:var(--c-mute)}
+.yg-ok{margin:10px 14px 0;padding:9px 12px;border-radius:6px;background:var(--c-ysel);color:var(--c-ink);font-size:12.5px;font-weight:500;border:1.5px solid var(--c-y)}
+</style>
+</head>
+<body>
+
+<nav class="nav"><div class="nav-in">
+  <span class="logo" role="img" aria-label="Yoga-Go"></span>
+  <span class="sep"></span><span class="lbl">Growth audit · by Adapty</span>
+  <div class="tabs"><button data-v="over" class="on">Overview</button><button data-v="pw">Prototype</button></div>
+  <a class="demo" href="https://calendly.com/d/cty4-37z-zqj" target="_blank" rel="noopener">Book a demo</a>
+</div></nav>
+
+<!-- ======================= OVERVIEW ======================= -->
+<div class="view on" id="view-over">
+  <header class="hero hero-frame dusk">
+    <svg class="curves" id="curves" viewBox="0 0 1400 720" preserveAspectRatio="none" aria-hidden="true"></svg>
+    <svg class="dial" viewBox="0 0 240 240" aria-hidden="true"><text x="120" y="176">7</text><circle class="ring" cx="120" cy="120" r="100"/><circle class="arc" cx="120" cy="120" r="100"/></svg>
+    <div class="wrap hero-in">
+      <div>
+        <div class="eyebrow">Growth audit · November 2026 · Prepared by Adapty</div>
+        <h1>Thirty-four steps build their plan. <em class="s">The paywall forgets every one.</em></h1>
+        <p class="lead">She picks Lose weight, sets 176 lb as her goal and the date of her vacation, and sees “Your 4-week yoga plan is ready!” over her own curve. The next screen reads “Get unlimited access to your personal yoga plan!”, the same for everyone. Here is that paywall carrying her goal, her date and her first week, in your design, at your prices.</p>
+        <div class="cta-row">
+          <button class="btn-w" data-open="pw">Open the three paywalls</button>
+          <button class="btn-o" data-walk>▶ Watch the 30-second walkthrough</button>
+        </div>
+        <p class="byline">Built from your iOS onboarding and paywall, your App Store listing, yogago.welltech.com and your live Meta ads.</p>
+      </div>
+      <div class="fan" aria-hidden="true">
+        <img src="img/fan-goal.jpg" style="left:0;top:70px;transform:rotate(-8deg)" alt="">
+        <img src="img/fan-dial.jpg" style="left:29%;top:14px;transform:rotate(-1deg);z-index:2" alt="">
+        <img src="img/fan-coll.jpg" style="left:58%;top:80px;transform:rotate(7deg)" alt="">
+        <img class="j" src="img/icon.png" alt="">
+      </div>
+    </div>
+  </header>
+
+  <div class="stats"><div class="wrap">
+    <div class="stat"><b><i>★</i> 4.6</b><span>from 90K ratings on the US App Store</span></div>
+    <div class="stat"><b>47M+</b><span>downloads, as your site says</span></div>
+    <div class="stat"><b>34</b><span>steps in the quiz before the paywall</span></div>
+    <div class="stat"><b>1</b><span>headline for every answer: “Get unlimited access to your personal yoga plan!”</span></div>
+  </div></div>
+
+  <section class="sec"><div class="wrap about">
+    <div>
+      <div class="kick">What this is</div>
+      <h2 class="sec-h">We read your quiz and paywall screen by screen, then rebuilt the paywall <b>around the answers it already has</b>.</h2>
+      <p class="sec-p">Adapty powers subscriptions for 30,000+ apps, so we see what moves purchases across the market. Nearly 500 apps build their paywalls and onboarding in Adapty Flow Builder, and millions of dollars in subscription revenue pass through it every month. For Yoga-Go we looked at one screen, the paywall, and at what the 34 steps before it already know.</p>
+      <div class="flowp">
+        <div class="k2">Your first launch today</div>
+        <div><i>1</i><span>Tracking and notifications asked first, over the dark “30+ million users have chosen us” welcome. <b>Good, kept.</b></span></div>
+        <div><i>2</i><span>34 steps: goals, body type, focus areas, height, weight, goal weight, age, a special occasion and its date. <b>Kept, and now used on the paywall.</b></span></div>
+        <div><i>3</i><span>“Your 4-week yoga plan is ready!” over a curve from today’s weight to the goal. <b>Good, kept.</b></span></div>
+        <div><i>4</i><span>The paywall: a pose clip, “Get unlimited access to your personal yoga plan!”, three plan columns with 3 months ticked, a white CONTINUE.</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="note"><h4><i>1</i>Your design, not ours</h4><p>The #F5F3FB page, your serif questions, the white option cards with the yellow tick, the ^ YOGA-GO mark, the #FCC41A CONTINUE in spaced capitals, and the dark paywall sheet with its three columns, red and yellow tags and white button. Your own photography and session names from the app. Only what the paywall says, and which column is ticked, changes.</p></div>
+      <div class="note"><h4><i>2</i>Your prices, as published</h4><p>$14.99 for 1 month, $44.99 for 3 months, $69.99 for 12 months, from your App Store in-app purchase list. $69.99 is 61% less than twelve months at $14.99 ($179.88), or $1.35 a week. No trial, no invented discount, no timer.</p></div>
+      <div class="note"><h4><i>3</i>You may have tested some of this</h4><p>We cannot see your experiment history, or which paywall each storefront and campaign gets. Tell us what you already ran and we will go deeper on the rest.</p></div>
+    </div>
+  </div></section>
+
+  <section class="sec" id="ads" style="padding-top:0"><div class="wrap">
+    <div class="kick">Your ads on Meta</div>
+    <h2 class="sec-h">Your ads promise a clear target. <b>The app paywall never shows one.</b></h2>
+    <p class="sec-p">The Meta Ad Library lists about 440 active ads that mention Yoga-Go, in English, Spanish, French and Italian, most started between 15 and 19 November 2026 on creator pages such as Michelle I Am and Dra.Toy “with Yoga-Go”. They send people to plan.yoga-go.io, your web quiz. People who install from the App Store take the same kind of quiz in the app, and its paywall is what this audit rebuilds. The three promises below are the three phones in the prototype.</p>
+    <div class="lib">
+      <div>
+        <div class="vid"><video src="img/ad-wl.mp4" autoplay muted loop playsinline poster="img/ad-wl-157.jpg"></video><span class="tag">META · RUNNING NOW</span></div>
+        <div class="strip"><img src="img/ad-wl-3.jpg" alt=""><img src="img/ad-wl-145.jpg" alt=""><img src="img/ad-wl-157.jpg" alt=""><img src="img/ad-wl-168.jpg" alt=""></div>
+      </div>
+      <div class="adb">
+        <div class="hook">“You answer a few questions … Just a clear target that actually works.”</div>
+        <div class="meta">Yoga-Go: Yoga For Weight Loss, run with Michelle I Am and Dra.Toy · live since 15 November 2026 · 3:17 · Facebook and Instagram · “Get VISIBLE body transformation in 28 DAYS with Tai Chi!” · Start training! → plan.yoga-go.io</div>
+        <dl>
+          <dt>In the ad</dt><dd>A woman at a pink studio class says she can’t keep up, then starts “the next challenge” at home. A coach at a microphone explains it: your weight, your goal, the exact set of moves.</dd>
+          <dt>The promise</dt><dd>A target built from your own answers, and the moves to reach it.</dd>
+          <dt>Today it lands on</dt><dd>plan.yoga-go.io, the web quiz. In the app the same answers end on “Get unlimited access to your personal yoga plan!”, with no target on it.</dd>
+          <dt>In the rebuild</dt><dd>The target is the headline: “Your 4-week Tai Chi plan to reach 176 lb”, her curve above it, her first three sessions below.</dd>
+        </dl>
+        <div class="go"><button data-idea="0">See the target on the paywall</button></div>
+        <div class="also">
+          <button data-phone="1"><img src="img/ad-chair2.jpg" alt=""><span><b>“I’m Carol. I’m 63.”</b>28 Day Tai Chi Challenge, since 17 Nov: “for nine minutes of Tai Chi chair”. <u>Open her paywall</u></span></button>
+          <button data-phone="2"><img src="img/ad-kate.jpg" alt=""><span><b>“If you’re over 50, that’s a perimenopausal belly.”</b>Coach Kate: Pilates &amp; Mobility, since 16 Nov. <u>Open her paywall</u></span></button>
+        </div>
+      </div>
+    </div>
+    <p class="lib-foot">With Adapty the in-app paywall reads the answers your quiz already collects, and can also be picked by the campaign an install came from. A new ad angle gets its own headline the same day, with no app release.</p>
+  </div></section>
+
+  <section class="sec" style="padding-top:0"><div class="wrap">
+    <div class="kick">The five ideas</div>
+    <h2 class="sec-h">Ranked by what we would <b>test first</b>.</h2>
+    <p class="sec-p">Tap any of them to open that change on all three phones.</p>
+    <div class="list" id="list"></div>
+  </div></section>
+
+  <section class="sec" style="padding-top:0"><div class="wrap">
+    <div class="kick">Potential outcome</div>
+    <h2 class="sec-h">Five changes, <b>one screen every subscriber sees</b>.</h2>
+    <div class="outc">
+      <div class="osh dusk">
+        <img class="ph" src="img/hero-woman.png" alt="">
+        <div class="k">Run together</div>
+        <h3>The plan they built, <em class="s" style="color:var(--gold)">on the screen they pay on</em></h3>
+        <div class="nums"><div><b>+15–20%</b><span>purchases</span></div><div><b>+10–15%</b><span>ARPU</span></div></div>
+        <p class="cap">Each goal’s paywall runs as its own A/B test against today’s, judged on revenue per paywall view.</p>
+      </div>
+      <div class="dos">
+        <div class="do"><div class="k">Do this week</div><h4>Pass goal, weights, date and practice to the paywall</h4><p>Values the quiz already holds. In Flow Builder the headline, the curve and week one read them. Live without an app release.</p></div>
+        <div class="do"><div class="k">Then</div><h4>Tick 12 months and show $1.35 a week</h4><p>A display change, not a price change. The same three products, with the yellow-tagged column pre-selected.</p></div>
+        <div class="do"><div class="k">And measure</div><h4>Revenue per paywall view, by goal and practice</h4><p>Adapty reports purchases and revenue for each segment, so you learn whether Tai Chi, Chair Yoga or Wall Pilates people buy the year.</p></div>
+      </div>
+    </div>
+    <div class="endcta"><button class="btn-k" data-open="pw">Open the prototype</button><a class="btn-l" href="https://calendly.com/d/cty4-37z-zqj" target="_blank" rel="noopener">Book a demo</a></div>
+    <p class="foot">Impact ranges are Adapty’s expected effect from teardowns and A/B tests across subscription apps, not measured lift for Yoga-Go. The onboarding and paywall screens and their copy come from a recording of the Yoga-Go iOS app; prices ($14.99, $44.99, $69.99) come from the in-app purchase list of the US App Store listing, read on 20 November 2026. 4.6 from 90K ratings and the review by Ksnazzy (21 March) are from the US App Store listing; 47M+ downloads and the reviews by Anna in Cornwall and Patti are from yogago.welltech.com; “30+ million users have chosen us” is your own welcome screen. Session names, durations and photos are from your App Store screenshots and site. Sample weights, goals and dates in the prototype are placeholders: the dates use 1.5 lb a week and stand in for your own Goal Projection. The ads are from the Meta Ad Library on 20 November 2026. 61% is $69.99 against 12 × $14.99 = $179.88; $1.35 a week is $69.99 ÷ 52; $3.46 a week is $14.99 × 12 ÷ 52 and $44.99 ÷ 13.</p>
+  </div></section>
+</div>
+
+<!-- ======================= PROTOTYPE ======================= -->
+<div class="view" id="view-pw">
+  <div class="wrap pwv">
+    <div class="kick">Prototype · one paywall per plan</div>
+    <h1>Three quizzes. <b>Three paywalls that remember them.</b></h1>
+    <p class="sub">The three people your Meta ads speak to: a weight-loss Tai Chi beginner, a 63-year-old on Chair Yoga, a woman over 50 toning up with Wall Pilates. Same prices, same design. Change their answers under each phone and watch the paywall rewrite itself, or tap inside: pick a plan, close it, start.</p>
+    <div class="tools">
+      <div class="seg" id="theme"><button data-th="light" class="on">Light</button><button data-th="dark">Dark</button></div>
+      <button class="wt" id="wt" data-walk>▶ 30-second walkthrough</button>
+    </div>
+    <div class="steps" id="steps">
+      <button data-st="today" class="td">Today</button><button data-st="plan">1 · Your plan</button><button data-st="pw" class="on">2 · Paywall</button><button data-st="plans">3 · Plans</button><button data-st="app">4 · In the app</button>
+    </div>
+    <p class="stcap" id="stcap"></p>
+    <div class="dcap" id="dcap"><div class="dcap-in"><span id="dtx"></span><div class="pr"><i id="dpr"></i></div></div></div>
+    <div class="trio" id="trio"></div>
+    <div class="ideas" id="ideas"></div>
+    <div class="qr dusk">
+      <img class="woman" src="img/hero-woman.png" alt="">
+      <img class="code" src="img/qr.svg" alt="QR code to this prototype">
+      <div><h3>Try it on your phone</h3><p>Scan to open the three paywalls in your hand. Every screen is buildable in Adapty Flow Builder and testable against today’s.</p></div>
+      <a class="demo" href="https://calendly.com/d/cty4-37z-zqj" target="_blank" rel="noopener">Book a demo</a>
+    </div>
+  </div>
+</div>
+
+<script>
+var $=function(s,r){ return (r||document).querySelector(s); }, $$=function(s,r){ return [].slice.call((r||document).querySelectorAll(s)); };
+function SV(d,w){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="'+(w||1.8)+'" stroke-linecap="round" stroke-linejoin="round">'+d+'</svg>'; }
+var XI=SV('<path d="M6 6l12 12M18 6 6 18"/>',2);
+var G={ theme:'light', step:'pw' };
+var NOW=new Date(2026,10,20);
+var MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+/* their three practices, as on the App Store screenshots; sessions and durations from their Collection screen */
+var PRAC={
+  taichi:{n:'Tai Chi',min:12,img:'t-taichi',wk:[['th2','Tai Chi','12–28 min'],['th1','Somatic Yoga with Marco','9–34 min'],['th3','Yoga for Better Sleep','43–48 min']]},
+  chair:{n:'Chair Yoga',min:9,img:'t-chair',wk:[['t-chair','Chair Yoga','9 min'],['th1','Somatic Yoga with Marco','9–34 min'],['th2','Tai Chi','12–28 min']]},
+  wall:{n:'Wall Pilates',min:15,img:'t-wall',wk:[['th0','Core Wall Pilates with Alex','15–42 min'],['t-wall','Pilates Practice 02','6 min'],['th1','Somatic Yoga with Marco','9–34 min']]}
+};
+/* their goal options, as on “What do you want to achieve?” */
+var GOAL={lose:'Lose weight',health:'Improve health',tone:'Get firm and toned',stress:'Relieve stress'};
+var OCC={vac:'your vacation',wed:'the wedding',bday:'your birthday',none:''};
+var OCCN={vac:'Vacation',wed:'Wedding',bday:'Birthday',none:'None'};
+var PL={m:['1 month','$14.99','$3.46','billed monthly',''],q:['3 months','$44.99','$3.46','billed every 3 months',''],y:['12 months','$69.99','$1.35','billed yearly','<s>$179.88</s>']};
+
+/* reviews, verbatim, matched to the practice */
+var REV={
+  taichi:['Day 10 and I thought, “I feel really well,” and the only change to my life was that I had started this Tai Chi course.','Anna in Cornwall, on yogago.welltech.com'],
+  chair:['This is doable so far and I already know my balance is getting better.','Ksnazzy, App Store review, in her 60s'],
+  wall:['I’ve improved my flexibility, mobility and balance.','Patti, on yogago.welltech.com']
+};
+
+/* the three phones: the three promises in your Meta ads */
+var PH=[
+  {ring:'#FCC41A',mt:'Meta ad',ad:'Weight loss · Tai Chi',lab:['Like your “clear target” ad','She can’t keep up at the gym and wants to lose weight before her vacation.'],a:{goal:'lose',prac:'taichi',w:198,gw:176,occ:'vac',age:44}},
+  {ring:'#1FB96B',mt:'Meta ad',ad:'Carol, 63 · Chair Yoga',lab:['Like your Tai Chi chair ad','63, starting from a chair, nine minutes at a time.'],a:{goal:'health',prac:'chair',w:172,gw:160,occ:'bday',age:63}},
+  {ring:'#E5484D',mt:'Meta ad',ad:'Over 50 · Wall Pilates',lab:['Like your Coach Kate ad','Over 50, wants a firmer belly without the gym.'],a:{goal:'tone',prac:'wall',w:165,gw:150,occ:'none',age:52}}
+];
+var COL=PH.map(function(){ return {}; });
+function initCol(i,keepAns){ var c=COL[i]; if(!keepAns||!c.a) c.a=JSON.parse(JSON.stringify(PH[i].a)); c.plan='y'; c.tplan='q'; c.min=PRAC[c.a.prac].min; return c; }
+PH.forEach(function(p,i){ initCol(i); });
+
+function weeks(a){ return Math.max(2,Math.ceil((a.w-a.gw)/1.5)); }
+function due(a){ var d=new Date(NOW.getTime()+weeks(a)*7*864e5); return MON[d.getMonth()]+' '+d.getDate(); }
+function axis(a){ var n=weeks(a), out=[]; for(var k=0;k<4;k++){ var d=new Date(NOW.getTime()+Math.round(n*k/3)*7*864e5); out.push(MON[d.getMonth()]+' '+d.getDate()); } return out; }
+function headline(a){
+  var P=PRAC[a.prac].n;
+  if(a.goal==='lose') return 'Your 4-week '+P+' plan to reach '+a.gw+' lb';
+  if(a.goal==='tone') return 'Your 4-week '+P+' plan to firm up by '+due(a);
+  if(a.goal==='health') return 'Your 4-week '+P+' plan for better balance and health';
+  return 'Your 4-week '+P+' plan to unwind, '+PRAC[a.prac].min+' minutes a day';
+}
+
+var TCAP={
+  today:'<b>Today.</b> One paywall for every answer: a pose clip, “Get unlimited access to your personal yoga plan!”, 3 months ticked.',
+  plan:'<b>Step 1. Yours, kept:</b> “Your 4-week yoga plan is ready!” over their own curve. Change the answers under a phone and the curve moves.',
+  pw:'<b>Step 2. Proposed:</b> the paywall says the plan back. Their goal in the headline, their curve on top, their first three sessions.',
+  plans:'<b>Step 3. Proposed:</b> 12 months ticked at $1.35 a week; your 4.6, 30+ million people and a review for their practice by the button.',
+  app:'<b>Step 4.</b> Purchase or X, they land on day 1 of their own plan. No second paywall.'
+};
+
+function sb(w){ return '<div class="sb'+(w?' w':'')+'"><span>9:41</span><i class="isl"></i><span class="ic"><svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="6" rx="1"/><rect x="9" y="2.5" width="3" height="8.5" rx="1"/><rect x="13.5" y="0" width="3" height="11" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="14" height="8" rx="2" fill="currentColor"/></svg></span></div>'; }
+
+/* their curve: today’s weight to the goal, yellow into green, two dark tags */
+function chart(i,id){
+  var a=COL[i].a, ax=axis(a), g='g'+id+i;
+  return '<div class="yg-chart" data-hl="curve"><div class="k">Your weight</div><svg viewBox="0 0 300 120"><defs><linearGradient id="'+g+'" x1="0" x2="1"><stop offset="0" stop-color="#FCC41A"/><stop offset=".55" stop-color="#B9DB6A"/><stop offset="1" stop-color="#5FD3A8"/></linearGradient></defs>'+
+    '<line x1="0" y1="110" x2="300" y2="110" stroke="var(--c-line)"/>'+
+    '<path d="M18 26 C 90 26, 110 70, 160 76 S 240 92, 282 94" fill="none" stroke="url(#'+g+')" stroke-width="5" stroke-linecap="round"/>'+
+    '<circle cx="18" cy="26" r="6" fill="#fff" stroke="#FCC41A" stroke-width="3"/><circle cx="282" cy="94" r="6" fill="#fff" stroke="#5FD3A8" stroke-width="3"/>'+
+    '<rect x="6" y="0" width="64" height="20" rx="10" fill="#3C3C40"/><text x="38" y="14" fill="#fff" font-size="11" font-weight="600" text-anchor="middle" font-family="-apple-system,Inter,sans-serif">'+a.w+' lb</text>'+
+    '<rect x="222" y="62" width="70" height="20" rx="10" fill="#3C3C40"/><text x="257" y="76" fill="#fff" font-size="11" font-weight="600" text-anchor="middle" font-family="-apple-system,Inter,sans-serif">Goal '+a.gw+' lb</text>'+
+    '</svg><div class="ax">'+ax.map(function(x){ return '<span>'+x+'</span>'; }).join('')+'</div></div>';
+}
+
+/* step 1: their screen, kept, now fed by the answers */
+function scrPlan(i){
+  var a=COL[i].a, P=PRAC[a.prac];
+  return sb()+'<div class="scr-top"><span class="yg-mark"></span></div>'+
+    '<div class="scr-body">'+chart(i,'p')+
+      '<div class="yg-pl"><div class="yg-q">Your 4-week <span>'+(a.prac==='taichi'?'Tai Chi':a.prac==='chair'?'chair yoga':'Pilates')+'</span> plan is ready!</div><p>We expect you to reach <b>'+a.gw+' lb</b> by <b>'+due(a)+'</b>'+(OCC[a.occ]?', before '+OCC[a.occ]:'')+'.</p></div>'+
+      '<div class="yg-uses"><div><span>Goal</span><b>'+GOAL[a.goal]+'</b></div><div><span>Practice</span><b>'+P.n+', '+P.min+' min a day</b></div><div><span>Age</span><b>'+a.age+'</b></div></div>'+
+    '</div><div class="scr-foot yg-footy"><button class="yg-cta" data-act="cont">Continue</button></div>';
+}
+function colsHTML(i,today){
+  var c=COL[i], sel=today?c.tplan:c.plan;
+  return '<div class="yg-cols" data-hl="plans">'+['m','q','y'].map(function(k){ var P=PL[k];
+    var tag=k==='q'?'<span class="tg r">MOST POPULAR</span>':k==='y'?'<span class="tg y">'+(today?'BEST VALUE':'SAVE 61%')+'</span>':'';
+    return '<button class="yg-col'+(sel===k?' on':'')+'" data-act="plan" data-p="'+k+'">'+tag+'<span class="pd">'+P[0]+'</span>'+
+      (today?'<span class="pw">'+P[1]+'</span><span class="pu">&nbsp;</span>':'<span class="pw">'+P[2]+'</span><span class="pu">per week</span><span class="tt">'+(P[4]?P[4]+' ':'')+P[1]+'</span>')+'</button>'; }).join('')+'</div>';
+}
+function scrToday(i){
+  var c=COL[i];
+  return '<div class="scr-body" style="background:var(--c-sheet)"><div class="yg-media" style="height:330px"><img class="pose" src="img/'+PRAC[c.a.prac].img+'.jpg" alt=""><div class="sb" style="position:absolute;left:0;right:0;top:0"><span>9:41</span><i class="isl"></i><span></span></div><button class="yg-x" data-act="tx" style="top:52px">'+XI+'</button></div>'+
+    '<div class="yg-sheet"><div class="yg-h">Get unlimited access to your personal yoga plan!</div>'+colsHTML(i,1)+
+    '<p class="yg-terms"><a>Subscription terms</a></p>'+
+    '<div class="yg-today">Today: the same screen for every goal, weight and date. 3 months is the ticked column.</div></div></div>'+
+    '<div class="scr-foot yg-pfoot"><button class="yg-wcta" data-act="tbuy">Continue</button></div>';
+}
+function scrPW(i){
+  var c=COL[i], a=c.a, P=PRAC[a.prac], L=PL[c.plan], R=REV[a.prac];
+  var chips='<span class="y">'+GOAL[a.goal]+'</span><span>'+P.min+' min a day</span>'+(OCC[a.occ]?'<span>Before '+OCC[a.occ]+'</span>':'<span>By '+due(a)+'</span>');
+  return '<div class="scr-body" style="background:var(--c-sheet)"><div class="yg-media pr" style="height:296px"><div class="sb" style="position:absolute;left:0;right:0;top:0"><span>9:41</span><i class="isl"></i><span></span></div><button class="yg-x" data-act="x" style="top:52px" aria-label="Close">'+XI+'</button>'+chart(i,'w').replace('class="yg-chart"','class="yg-chart" style="top:92px"')+'</div>'+
+    '<div class="yg-sheet"><div class="yg-h" data-hl="head">'+headline(a)+'</div><div class="yg-chip">'+chips+'</div>'+
+    '<div class="yg-wk" data-hl="week"><div class="t"><span>Your first week</span><span>'+a.gw+' lb by '+due(a)+'</span></div><div class="rw">'+P.wk.map(function(s,k){ return '<div class="yg-ses"><img src="img/'+s[0]+'.jpg" alt=""><div>'+s[1]+'<small>Day '+(k+1)+' · '+s[2]+'</small></div></div>'; }).join('')+'</div></div>'+
+    colsHTML(i)+
+    '<p class="yg-save">'+(c.plan==='y'?'<b>Save 61%</b> against twelve months at $14.99 ($179.88).':c.plan==='q'?'$44.99 every 3 months, the same $3.46 a week as monthly.':'$14.99 every month.')+'</p>'+
+    '<div class="yg-proof" data-hl="proof"><div class="t"><b>4.6</b><span class="yg-st">★★★★★</span><span>90K ratings · 30+ million people chose Yoga-Go</span></div><q>'+R[0]+'</q><small>'+R[1]+'</small></div>'+
+    '<p class="yg-terms"><a>Subscription terms</a> · <a>Privacy policy</a> · <a>Restore</a></p>'+
+    '</div></div>'+
+    '<div class="scr-foot yg-pfoot" data-hl="cta"><button class="yg-wcta" data-act="buy">Start my '+P.n+' plan</button><p class="yg-fine">'+L[1]+' '+L[3]+'. Cancel anytime in App Store settings.</p></div>';
+}
+/* their workout screen with the minutes dial — drag it */
+function scrApp(i){
+  var c=COL[i], a=c.a, P=PRAC[a.prac], s=P.wk[0], m=c.min, f=Math.min(1,m/30), ang=f*2*Math.PI-Math.PI/2, kx=85+70*Math.cos(ang), ky=85+70*Math.sin(ang);
+  return '<div class="yg-app"><div class="yg-hero"><img src="img/'+P.img+'.jpg" alt=""><div class="sb w" style="position:absolute;left:0;right:0;top:0"><span>9:41</span><i class="isl"></i><span></span></div><div class="day">Day 1 of 28 · '+P.n+'</div>'+
+    '<div class="yg-dial" data-dial><svg viewBox="0 0 170 170"><circle cx="85" cy="85" r="70" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="6"/><path d="M85 15 A70 70 0 '+(f>.5?1:0)+' 1 '+kx.toFixed(1)+' '+ky.toFixed(1)+'" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round"/><circle cx="'+kx.toFixed(1)+'" cy="'+ky.toFixed(1)+'" r="10" fill="#fff"/></svg><div class="v"><b>'+m+'</b><span>minutes</span></div></div>'+
+    '<div class="nm">'+s[1]+'<small>Built from your answers: '+GOAL[a.goal].toLowerCase()+', '+a.gw+' lb by '+due(a)+'</small></div></div>'+
+    (c.paid?'<div class="yg-ok">Welcome to Yoga-Go. Your 4-week plan starts today.</div>':'')+
+    '<div class="yg-cards"><div>Yoga type<b>'+P.n+'</b></div><div>Focus zone<b>'+(a.goal==='tone'?'Belly':a.goal==='health'?'Balance':'Total body')+'</b></div></div>'+
+    '<div class="yg-li">Difficulty <span>Easy ›</span></div><div class="yg-li">Savasana <span>On ›</span></div>'+P.wk.slice(1).map(function(w,k){ return '<div class="yg-li">Day '+(k+2)+' · '+w[1]+' <span>'+w[2]+'</span></div>'; }).join('')+
+    '<div style="flex:1"></div><div class="yg-footy"><button class="yg-cta" data-act="start">Start ›</button></div></div>';
+}
+
+function phoneHTML(i){
+  var c=COL[i], s=c.scr, inner;
+  if(s==='today') inner=scrToday(i); else if(s==='plan') inner=scrPlan(i); else if(s==='app') inner=scrApp(i); else inner=scrPW(i);
+  return '<div class="phone'+(G.theme==='dark'?' dk':'')+'"><section class="scr" data-s="'+s+'">'+inner+'<div class="toast"></div></section></div>';
+}
+function drawCol(i,keep){
+  var box=$('#trio .tcol[data-i="'+i+'"] .pbox'); if(!box) return;
+  var ph=box.querySelector('.phone'), b=box.querySelector('.scr-body'), y=b?b.scrollTop:0;
+  var tmp=document.createElement('div'); tmp.innerHTML=phoneHTML(i);
+  if(ph) box.replaceChild(tmp.firstChild,ph); else box.insertBefore(tmp.firstChild,box.firstChild);
+  if(keep){ var nb=box.querySelector('.scr-body'); if(nb) nb.scrollTop=y; }
+  var pt=$('#trio .tcol[data-i="'+i+'"] .apill .tx'); if(pt) pt.textContent=pillText(i);
+}
+function go(i,s){ COL[i].scr=s; drawCol(i); }
+function pillText(i){ var a=COL[i].a; return GOAL[a.goal]+' · '+PRAC[a.prac].n+' · '+a.w+'→'+a.gw+' lb'; }
+
+/* the answers under each phone: change one, the plan screen and the paywall rewrite */
+function opts(o,v){ return Object.keys(o).map(function(k){ return '<option value="'+k+'"'+(k==v?' selected':'')+'>'+o[k]+'</option>'; }).join(''); }
+function nums(a,b,st,v){ var o={}; for(var x=a;x<=b;x+=st) o[x]=x+' lb'; return opts(o,v); }
+function ansHTML(i){ var a=COL[i].a, ag={}; for(var x=35;x<=75;x++) ag[x]=x;
+  return '<div class="ans" data-ans="'+i+'"><div class="h"><span>Their answers</span><i>change one</i></div><div class="g">'+
+    '<label>Goal<select data-k="goal">'+opts(GOAL,a.goal)+'</select></label>'+
+    '<label>Practice<select data-k="prac">'+opts({taichi:'Tai Chi',chair:'Chair Yoga',wall:'Wall Pilates'},a.prac)+'</select></label>'+
+    '<label>Weight<select data-k="w">'+nums(130,260,1,a.w)+'</select></label>'+
+    '<label>Goal weight<select data-k="gw">'+nums(110,240,1,a.gw)+'</select></label>'+
+    '<label>Occasion<select data-k="occ">'+opts(OCCN,a.occ)+'</select></label>'+
+    '<label>Age<select data-k="age">'+opts(ag,a.age)+'</select></label>'+
+  '</div></div>'; }
+function paintAns(i){ var el=$('#trio .tcol[data-i="'+i+'"] .ans'); if(!el) return; var t=document.createElement('div'); t.innerHTML=ansHTML(i); el.parentNode.replaceChild(t.firstChild,el); }
+document.addEventListener('change',function(e){
+  var s=e.target.closest('[data-ans] select'); if(!s) return; var i=+s.closest('[data-ans]').dataset.ans, a=COL[i].a, k=s.dataset.k;
+  a[k]=(k==='w'||k==='gw'||k==='age')?+s.value:s.value;
+  if(a.gw>=a.w){ a.gw=a.w-6; paintAns(i); }
+  if(k==='prac') COL[i].min=PRAC[a.prac].min;
+  drawCol(i,true);
+  $$('#trio .tcol[data-i="'+i+'"] [data-hl=head],#trio .tcol[data-i="'+i+'"] .yg-pl,#trio .tcol[data-i="'+i+'"] [data-hl=curve]').forEach(function(el){ el.classList.remove('pulse'); void el.offsetWidth; el.classList.add('pulse'); });
+});
+
+function renderTrio(){
+  $('#trio').innerHTML=PH.map(function(p,i){
+    return '<div class="tcol" data-i="'+i+'" style="--ring:'+p.ring+'"><div class="apill"><span class="mt">'+p.mt+'</span><span class="tx">'+pillText(i)+'</span></div><div class="pbox"><i class="finger"></i></div><div class="tlab"><b>'+p.lab[0]+'</b><span>'+p.lab[1]+'</span></div>'+ansHTML(i)+'</div>';
+  }).join('');
+  PH.forEach(function(p,i){ drawCol(i); });
+}
+function paintSteps(){ $$('#steps button').forEach(function(b){ b.classList.toggle('on',b.dataset.st===G.step); }); $('#stcap').innerHTML=TCAP[G.step]||''; $$('#trio .tcol').forEach(function(t){ t.classList.toggle('ring',G.step!=='today'); }); }
+function stepScr(st){ return st==='plans'?'pw':st; }
+function setStep(st,keepAns){ G.step=st; PH.forEach(function(p,i){ initCol(i,keepAns); COL[i].paid=false; COL[i].scr=stepScr(st); }); paintSteps(); PH.forEach(function(p,i){ drawCol(i); });
+  if(st==='plans') PH.forEach(function(p,i){ var box=$('#trio .tcol[data-i="'+i+'"] .pbox'), b=$('.scr-body',box), el=$('[data-hl=plans]',box); if(b&&el) b.scrollTop=Math.max(0,offTop(el,b)-150); }); }
+function offTop(el,b){ var y=0; while(el&&el!==b){ y+=el.offsetTop; el=el.offsetParent; } return y; }
+function toast(i,m){ var e=$('#trio .tcol[data-i="'+i+'"] .toast'); if(!e) return; e.textContent=m; e.classList.add('show'); clearTimeout(e._t); e._t=setTimeout(function(){ e.classList.remove('show'); },2200); }
+
+/* taps inside a phone change only that phone */
+document.addEventListener('click',function(e){
+  var t=e.target.closest('[data-act]'); if(!t) return; var col=t.closest('.tcol'); if(!col) return;
+  var i=+col.dataset.i, c=COL[i], a=t.dataset.act;
+  if(a==='cont'){ c.plan='y'; go(i,'pw'); }
+  else if(a==='plan'){ if(c.scr==='today') c.tplan=t.dataset.p; else c.plan=t.dataset.p; drawCol(i,true); }
+  else if(a==='buy'){ toast(i,'Apple’s purchase sheet opens here'); clearTimeout(c.bt); c.bt=setTimeout(function(){ if(c.scr!=='pw') return; c.paid=true; go(i,'app'); toast(i,'Subscribed. Day 1 of your plan.'); },1500); }
+  else if(a==='tbuy') toast(i,'Apple’s purchase sheet opens here');
+  else if(a==='x'){ c.paid=false; go(i,'app'); toast(i,'Closed straight into the app. No second paywall.'); }
+  else if(a==='tx') toast(i,'Closes the paywall');
+  else if(a==='start') toast(i,c.paid?'Starting '+PRAC[c.a.prac].wk[0][1]+', '+c.min+' min':'Opens the paywall again from a locked session');
+});
+/* the minutes dial, working */
+(function(){ var drag=null;
+  function set(e){ var d=drag, r=d.el.getBoundingClientRect(), x=e.clientX-(r.left+r.width/2), y=e.clientY-(r.top+r.height/2), ang=Math.atan2(y,x)+Math.PI/2; if(ang<0) ang+=2*Math.PI; var m=Math.max(5,Math.min(30,Math.round(ang/(2*Math.PI)*30))); if(m!==COL[d.i].min){ COL[d.i].min=m; drawCol(d.i); d.el=$('#trio .tcol[data-i="'+d.i+'"] [data-dial]'); } }
+  document.addEventListener('pointerdown',function(e){ var el=e.target.closest('[data-dial]'); if(!el) return; drag={el:el,i:+el.closest('.tcol').dataset.i}; set(e); e.preventDefault(); });
+  document.addEventListener('pointermove',function(e){ if(drag) set(e); });
+  document.addEventListener('pointerup',function(){ drag=null; });
+})();
+
+function fit(){ var w=document.documentElement.clientWidth||innerWidth; if(w<300) w=Math.max(w,(screen&&screen.width)||390,320); var sc=w>=1240?0.8:w>=900?(w-160)/(3*390):(w-48)/390; sc=Math.min(0.8,Math.max(0.42,sc)); $('#trio').style.setProperty('--sc',sc.toFixed(3)); }
+
+/* ---- the five ideas ---- */
+var IDEAS=[
+  {t:'Name their goal in the paywall headline',p:'Every answer ends on “Get unlimited access to your personal yoga plan!”, though the screen right before has just drawn their curve to their goal weight. Say the plan back: “Your 4-week Tai Chi plan to reach 176 lb”, with their goal, minutes a day and the occasion they set as three small tags under it.',o:'CR +15–20%',u:'expected',st:'pw',hl:'head',kept:'Kept: your dark sheet, the white bold headline, centred, and the three columns under it.'},
+  {t:'Put 4.6 stars and 30 million people by the plans',p:'Your welcome screen opens on “30+ million users have chosen us” and the App Store shows 4.6 from 90K ratings, but neither reaches the paywall. Add one line with both under the columns, and one real review that matches the practice they chose: “I already know my balance is getting better.” for Chair Yoga.',o:'CR +10–15%',u:'expected',st:'plans',hl:'proof',kept:'Kept: every claim is your own, from your welcome screen, your App Store listing and your site.'},
+  {t:'Tick 12 months and show it per week',p:'The white column that arrives ticked is 3 months, and no column says what the year saves. Tick 12 months and show each plan per week: $1.35 against $3.46, with “Save 61%” in your yellow tag ($69.99 against twelve months at $14.99).',o:'ARPU +10–15%',u:'expected',st:'plans',hl:'plans',kept:'Kept: the three columns, the white selected column, your red and yellow tags and every price.'},
+  {t:'Show their curve and first week above the plans',p:'The top of the paywall plays a pose clip that is the same for everyone. Put their own curve there (198 lb today, 176 lb by Mar 5) and the first three sessions of their plan from your library: Tai Chi 12–28 min, Somatic Yoga with Marco, Yoga for Better Sleep.',o:'CR +5–10%',u:'expected',st:'pw',hl:'week',kept:'Kept: your curve and its dark weight tags from “Your 4-week yoga plan is ready!”, your photos and session names.'},
+  {t:'Make the button say what it starts',p:'The paywall button says CONTINUE, like the 34 screens before it. Make it “START MY TAI CHI PLAN”, and add one line under it with the price, the period and “Cancel anytime in App Store settings.”',o:'CR +3–8%',u:'expected',st:'plans',hl:'cta',kept:'Kept: the full-width white button in spaced capitals on the dark sheet.'}
+];
+function ideaRow(d){ return '<div class="row"><span class="out">'+d.o+' <small>'+d.u+'</small></span><span class="see">See it on the phones →</span></div>'; }
+$('#ideas').innerHTML=IDEAS.map(function(d,i){ return '<div class="idea" data-idea="'+i+'"><div class="n">Idea '+(i+1)+' of 5</div><h3>'+d.t+'</h3><p>'+d.p+'</p>'+ideaRow(d)+'<div class="kept">'+d.kept+'</div></div>'; }).join('');
+$('#list').innerHTML=IDEAS.map(function(d,i){ return '<div class="it" data-idea="'+i+'"><div class="em">0'+(i+1)+'</div><div><h3>'+d.t+'</h3><p>'+d.p+'</p>'+ideaRow(d)+'</div></div>'; }).join('');
+function toTrio(){ var t=$('#trio'); if(!t) return; var y=t.getBoundingClientRect().top+scrollY-(innerWidth<900?84:Math.max(84,(innerHeight-t.offsetHeight)/2)); window.scrollTo({top:Math.max(0,y),behavior:'smooth'}); }
+function pulseEl(el){ el.classList.remove('pulse'); void el.offsetWidth; el.classList.add('pulse'); }
+function showIdea(n){
+  var d=IDEAS[n]; stopWalk(); showView('pw'); setStep(d.st);
+  setTimeout(function(){
+    toTrio();
+    $$('#trio [data-hl="'+d.hl+'"]').forEach(function(el){
+      var b=el.closest('.scr-body'); if(b) b.scrollTop=Math.max(0,offTop(el,b)-(d.hl==='proof'?300:d.hl==='plans'?150:110));
+      pulseEl(el);
+    });
+  },80);
+}
+document.addEventListener('click',function(e){ var c=e.target.closest('[data-idea]'); if(c) showIdea(+c.dataset.idea); });
+document.addEventListener('click',function(e){ var c=e.target.closest('[data-phone]'); if(!c) return; var i=+c.dataset.phone; stopWalk(); showView('pw'); setStep('pw');
+  setTimeout(function(){ var col=$('#trio .tcol[data-i="'+i+'"]'); col.scrollIntoView({behavior:'smooth',block:'start',inline:'center'}); pulseEl($('.phone',col)); },80); });
+
+/* ---- views ---- */
+function showView(v){ $$('.view').forEach(function(x){ x.classList.remove('on'); }); $('#view-'+v).classList.add('on'); $$('.tabs button').forEach(function(b){ b.classList.toggle('on',b.dataset.v===v); });
+  if(v!=='pw') stopWalk();
+  var q=new URLSearchParams(location.search); q.delete('open'); q.delete('step'); if(v==='pw') q.set('view','proto'); else q.delete('view'); history.replaceState(null,'',location.pathname+(q.toString()?'?'+q:'')); scrollTo(0,0); fit(); }
+$$('.tabs button').forEach(function(b){ b.addEventListener('click',function(){ showView(b.dataset.v); }); });
+$$('[data-open]').forEach(function(b){ b.addEventListener('click',function(){ showView(b.dataset.open); }); });
+$$('#steps button').forEach(function(b){ b.addEventListener('click',function(){ stopWalk(); setStep(b.dataset.st,true); }); });
+$$('#theme button').forEach(function(b){ b.addEventListener('click',function(){ G.theme=b.dataset.th; $$('#theme button').forEach(function(x){ x.classList.toggle('on',x===b); }); $$('#trio .phone').forEach(function(p){ p.classList.toggle('dk',G.theme==='dark'); }); }); });
+
+/* ---- the 30-second walkthrough: drives the real phones ---- */
+var walk={on:false,tok:0};
+function wait(ms,tk){ return new Promise(function(res,rej){ setTimeout(function(){ tk===walk.tok?res():rej('stop'); },ms); }); }
+function cap(t,p){ $('#dtx').textContent=t; $('#dpr').style.width=p+'%'; }
+async function tap(i,sel,tk){
+  var col=$('#trio .tcol[data-i="'+i+'"]'), box=$('.pbox',col), el=$(sel,box), f=$('.finger',box); if(!el) return;
+  var b=box.getBoundingClientRect(), r=el.getBoundingClientRect();
+  f.classList.add('on'); f.style.left=(r.left-b.left+r.width/2)+'px'; f.style.top=(r.top-b.top+r.height/2)+'px';
+  await wait(380,tk); f.classList.add('press'); await wait(120,tk); f.classList.remove('press'); el.click(); await wait(160,tk);
+}
+async function scrollAll(sel,off,tk){ var bs=PH.map(function(p,i){ var box=$('#trio .tcol[data-i="'+i+'"] .pbox'), b=$('.scr-body',box), el=$(sel,box); return b&&el?[b,b.scrollTop,Math.max(0,offTop(el,b)-off)]:null; }).filter(Boolean), t0=performance.now();
+  while(true){ var k=Math.min(1,(performance.now()-t0)/600), e=1-Math.pow(1-k,3); bs.forEach(function(x){ x[0].scrollTop=x[1]+(x[2]-x[1])*e; }); if(k>=1) break; await wait(16,tk); } }
+function pulseAll(hl){ $$('#trio [data-hl="'+hl+'"]').forEach(pulseEl); }
+async function startWalk(){
+  stopWalk(); var tk=++walk.tok; walk.on=true; showView('pw'); $('#dcap').classList.add('on'); $('#wt').classList.add('on'); $('#wt').textContent='■ Stop walkthrough';
+  var t0=performance.now();
+  try{
+    setStep('plan'); toTrio();
+    cap('Three people finish your quiz. Your plan screen draws each one’s curve to their goal.',8); pulseAll('curve'); await wait(2600,tk);
+    await tap(1,'[data-act=cont]',tk); go(0,'pw'); go(2,'pw');
+    cap('The paywall says the plan back: Tai Chi to 176 lb, Chair Yoga for balance, Wall Pilates by Jan 29.',24); pulseAll('head'); await wait(2800,tk);
+    cap('Their own curve on top, their first three sessions from your library.',38); pulseAll('week'); await wait(2400,tk);
+    await scrollAll('[data-hl=plans]',150,tk);
+    cap('12 months arrives ticked at $1.35 a week, 61% under twelve months at $14.99.',54); pulseAll('plans'); await wait(1500,tk);
+    await tap(1,'[data-p=q]',tk); await wait(700,tk); await tap(1,'[data-p=y]',tk); await wait(600,tk);
+    await scrollAll('[data-hl=proof]',300,tk);
+    cap('Your 4.6, 30+ million people and a review for their own practice, next to the button.',72); pulseAll('proof'); await wait(2400,tk);
+    cap('The button names the plan. The X closes straight into day 1. No second paywall.',88); pulseAll('cta'); await wait(1200,tk);
+    await tap(1,'[data-act=x]',tk); go(0,'app'); go(2,'app'); await wait(2200,tk);
+    cap('That’s the screen. Change the answers under any phone to rewrite it.',100); console.log('walkthrough ms',Math.round(performance.now()-t0));
+    await wait(1400,tk); stopWalk(); setStep('pw');
+  }catch(e){}
+}
+function stopWalk(){ if(!walk.on) return; walk.on=false; walk.tok++; $('#dcap').classList.remove('on'); $('#wt').classList.remove('on'); $('#wt').textContent='▶ 30-second walkthrough'; $$('.finger').forEach(function(f){ f.classList.remove('on'); }); }
+$$('[data-walk]').forEach(function(b){ b.addEventListener('click',function(){ if(walk.on&&b.id==='wt'){ stopWalk(); return; } startWalk(); }); });
+document.addEventListener('pointerdown',function(e){ if(!walk.on||!e.isTrusted) return; if(e.target.closest('#wt')) return; if(e.target.closest('#trio,#steps,#theme,.tabs,.nav')) stopWalk(); },true);
+
+/* hero: goal curves drawing themselves, today’s weight down to the goal */
+(function(){
+  var s='<defs><linearGradient id="hc" x1="0" x2="1"><stop offset="0" stop-color="#FCC41A" stop-opacity=".55"/><stop offset="1" stop-color="#5FD3A8" stop-opacity=".45"/></linearGradient></defs>';
+  for(var k=0;k<7;k++){ var y0=120+k*62, y1=y0+150+(k%3)*30, d=(-(k*1.3)%11).toFixed(1);
+    s+='<path d="M-40 '+y0+' C 300 '+y0+', 420 '+(y0+90)+', 700 '+(y0+110)+' S 1100 '+y1+', 1460 '+y1+'" stroke="url(#hc)" style="animation-delay:'+d+'s;opacity:'+(k%2?.35:.6)+'"/>'+
+       '<circle cx="1180" cy="'+(y1-6)+'" r="5" fill="#5FD3A8" style="animation-delay:'+d+'s"/>'; }
+  $('#curves').innerHTML=s;
+})();
+
+renderTrio(); fit(); paintSteps(); addEventListener('resize',fit); addEventListener('load',fit); addEventListener('pageshow',fit); if(window.ResizeObserver) new ResizeObserver(fit).observe(document.documentElement);
+(function(){ var q=new URLSearchParams(location.search); if(q.get('view')==='proto'||q.get('open')==='proto') showView('pw'); if(q.get('step')) setStep(q.get('step')); })();
+</script>
+<script>
+/* GitHub Pages lets browsers keep this page for 10 minutes; if a newer build is live, reload onto it */
+var BUILD='b1';
+fetch(location.pathname+'?cb='+Date.now(),{cache:'no-store'}).then(function(r){ return r.text(); }).then(function(h){
+  var m=h.match(/var BUILD='([^']+)'/); if(m && m[1]!==BUILD){ var q=new URLSearchParams(location.search); q.set('v',m[1]); location.replace(location.pathname+'?'+q.toString()); }
+}).catch(function(){});
+</script>
+</body>
+</html>
